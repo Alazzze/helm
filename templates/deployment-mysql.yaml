@@ -34,4 +34,4 @@ spec:
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:
-            claimName: local-pvc  # Змінити ім'я PVC на local-pvc
+            claimName: local-pvc
