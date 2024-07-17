@@ -1,0 +1,36 @@
+namespace: wordpress
+
+wordpress:
+  image: wordpress:5.5.1
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30692
+
+mysql:
+  image: mysql:8.0.27
+  service:
+    type: ClusterIP
+    port: 3306
+  dbUser: myuser
+  dbPassword: mypassword
+  rootPassword: mysqlpassword
+  persistence:
+    enabled: true
+    existingClaim: local-pvc
+
+phpmyadmin:
+  image: phpmyadmin/phpmyadmin
+  service:
+    type: NodePort
+    port: 8080
+    targetPort: 80
+
+nfs:
+  path: "/data"
+  storage: 5Gi
+
+secret:
+  WORDPRESS_DB_USER: myuser
+  WORDPRESS_DB_PASSWORD: mypassword
+  MYSQL_ROOT_PASSWORD: mysqlpassword
