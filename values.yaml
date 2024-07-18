@@ -6,15 +6,29 @@ wordpress:
     type: NodePort
     port: 80
     nodePort: 30692
+  env:
+    - name: WORDPRESS_DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: wordpress-secrets
+          key: WORDPRESS_DB_USER
+    - name: WORDPRESS_DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: wordpress-secrets
+          key: WORDPRESS_DB_PASSWORD
 
 mysql:
   image: mysql:8.0.27
   service:
     type: ClusterIP
     port: 3306
-  dbUser: myuser
-  dbPassword: mypassword
-  rootPassword: mysqlpassword
+  env:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: wordpress-secrets
+          key: MYSQL_ROOT_PASSWORD
   persistence:
     enabled: true
     existingClaim: local-pvc
@@ -29,8 +43,3 @@ phpmyadmin:
 nfs:
   path: "/data"
   storage: 5Gi
-
-secret:
-  WORDPRESS_DB_USER: myuser
-  WORDPRESS_DB_PASSWORD: mypassword
-  MYSQL_ROOT_PASSWORD: mysqlpassword
